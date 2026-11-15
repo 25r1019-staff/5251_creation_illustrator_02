@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>課題制作 | 課題リスト</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --bg: #e9ece7;
+    --paper: #f8f9f5;
+    --ink: #171b1a;
+    --muted: #69716c;
+    --line: #cbd1ca;
+    --blue: #254be8;
+    --acid: #d4ff3f;
+    --ease: cubic-bezier(.2,.75,.25,1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { background: var(--bg); scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    padding: clamp(18px, 4vw, 56px);
+    color: var(--ink);
+    background:
+      linear-gradient(rgba(23,27,26,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(23,27,26,.035) 1px, transparent 1px),
+      var(--bg);
+    background-size: 32px 32px;
+    font-family: "Manrope", "Noto Sans JP", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #wrapper {
+    position: relative;
+    isolation: isolate;
+    width: min(100%, 1120px);
+    min-height: calc(100vh - clamp(36px, 8vw, 112px));
+    margin: 0 auto;
+    padding: clamp(30px, 6.5vw, 82px);
+    overflow: hidden;
+    background: var(--paper);
+    border: 1px solid rgba(23,27,26,.12);
+    box-shadow: 0 24px 80px rgba(26,36,30,.09);
+    animation: page-in .8s var(--ease) both;
+  }
+
+  #wrapper::before {
+    content: "FIELD NOTES   /   DESIGN ASSIGNMENT";
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    margin-bottom: clamp(34px, 5vw, 62px);
+    padding: 0 10px;
+    color: var(--paper);
+    background: var(--ink);
+    font: 500 10px/1 "DM Mono", monospace;
+    letter-spacing: .12em;
+  }
+
+  #wrapper::after {
+    content: "02";
+    position: absolute;
+    z-index: -1;
+    top: 38px;
+    right: clamp(24px, 5vw, 64px);
+    color: rgba(37,75,232,.07);
+    font: 800 clamp(150px, 26vw, 310px)/.85 "Manrope", sans-serif;
+    letter-spacing: -.1em;
+    pointer-events: none;
+    animation: number-drift 12s ease-in-out infinite alternate;
+  }
+
+  h1 {
+    max-width: 800px;
+    margin: 0 0 34px;
+    font-size: clamp(42px, 8vw, 92px);
+    font-weight: 800;
+    line-height: 1.04;
+    letter-spacing: -.075em;
+    animation: rise-in .8s .08s var(--ease) both;
+  }
+
+  h1::after {
+    content: "";
+    display: block;
+    width: clamp(54px, 8vw, 100px);
+    height: 9px;
+    margin-top: 25px;
+    background: var(--blue);
+    transform-origin: left;
+    animation: bar-grow .8s .55s var(--ease) both;
+  }
+
+  p {
+    max-width: 780px;
+    margin: 0 0 18px;
+    color: #4f5953;
+    font-size: clamp(13px, 1.4vw, 15px);
+    line-height: 2;
+  }
+
+  p:first-of-type {
+    position: relative;
+    max-width: 850px;
+    margin-bottom: 24px;
+    padding: 22px 25px 22px 28px;
+    color: var(--ink);
+    background: #eef1eb;
+    border-left: 3px solid var(--blue);
+    animation: rise-in .8s .18s var(--ease) both;
+  }
+
+  p:last-of-type {
+    margin: 34px 0 16px;
+    font-size: 13px;
+    animation: rise-in .8s .28s var(--ease) both;
+  }
+
+  ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 30px 0 0;
+    padding: 0;
+    border-top: 1px solid var(--ink);
+    list-style: none;
+  }
+
+  li {
+    min-width: 0;
+    border-bottom: 1px solid var(--line);
+    opacity: 0;
+    animation: item-in .65s var(--ease) forwards;
+  }
+
+  li:nth-child(odd) { border-right: 1px solid var(--line); }
+  li:nth-child(even) { padding-left: 26px; }
+
+  li:nth-child(1) { animation-delay: .24s; }
+  li:nth-child(2) { animation-delay: .31s; }
+  li:nth-child(3) { animation-delay: .38s; }
+  li:nth-child(4) { animation-delay: .45s; }
+  li:nth-child(5) { animation-delay: .52s; }
+  li:nth-child(6) { animation-delay: .59s; }
+  li:nth-child(7) { animation-delay: .66s; }
+  li:nth-child(8) { animation-delay: .73s; }
+  li:nth-child(9) { animation-delay: .80s; }
+
+  li a {
+    position: relative;
+    display: flex;
+    min-height: 88px;
+    align-items: center;
+    gap: 17px;
+    padding: 20px 22px 20px 0;
+    overflow: hidden;
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color .28s var(--ease), padding .35s var(--ease);
+  }
+
+  li a::before {
+    content: "0" counter(list-item);
+    flex: 0 0 30px;
+    color: var(--blue);
+    font: 500 11px/1 "DM Mono", monospace;
+    letter-spacing: .03em;
+  }
+
+  li a::after {
+    content: "↗";
+    display: grid;
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    margin-left: auto;
+    place-items: center;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    font: 16px/1 "Manrope", sans-serif;
+    transition: transform .35s var(--ease), color .25s, background .25s, border-color .25s;
+  }
+
+  li a:hover {
+    padding-left: 9px;
+    color: var(--blue);
+  }
+
+  li a:hover::after {
+    transform: rotate(45deg);
+    color: var(--ink);
+    background: var(--acid);
+    border-color: var(--acid);
+  }
+
+  li a:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: -4px;
+  }
+
+  @media (max-width: 680px) {
+    body { padding: 12px; }
+    #wrapper {
+      min-height: calc(100vh - 24px);
+      padding: 30px 22px 44px;
+    }
+    #wrapper::before { margin-bottom: 38px; font-size: 9px; }
+    #wrapper::after { top: 28px; right: 18px; font-size: 150px; }
+    h1 { max-width: 90%; font-size: clamp(42px, 12vw, 64px); }
+    p:first-of-type { padding: 17px 18px; }
+    ul { grid-template-columns: 1fr; margin-top: 22px; }
+    li:nth-child(odd) { border-right: 0; }
+    li:nth-child(even) { padding-left: 0; }
+    li a { min-height: 76px; padding: 16px 8px 16px 0; }
+  }
+
+  @keyframes page-in {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes rise-in {
+    from { opacity: 0; transform: translateY(22px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes item-in {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bar-grow {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+  @keyframes number-drift {
+    from { transform: translate3d(0,0,0) rotate(-3deg); }
+    to { transform: translate3d(-12px,10px,0) rotate(2deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: .01ms !important;
+    }
+  }
+</style>
+
+</head>
+<body>
+  <div id="wrapper">
+    <h1>第2回 課題制作</h1>
+    <p>
+      2回目の課題制作は、本日（2026年11月16日）現在で応募可能な案件に対応していただきます。完成後の応募の有無につきましてはご自身でお決めください。
+      <br>
+      スクールへの提出は先日の課題（企業の名刺）と同様で、11月26日（木）の17時までに納品いただきますようお願いいたします。
+    </p>
+    <p>
+      まずは今回課題として取り組む案件を以下の案件一覧より選択してください。案件の詳細は各リンク先のページにてご確認いただけます。
+    </p>
+
+    <ul>
+      <li>
+        <a href="https://crowdworks.jp/public/jobs/13589928" target="_blank" rel="noopener noreferrer">A4チラシ_01</a>
+      </li>
+      <li>
+        <a href="https://www.kua.or.jp/oubo2026/" target="_blank" rel="noopener noreferrer">A4チラシ_02</a>
+      </li>
+      <li>
+        <a href="https://crowdworks.jp/public/jobs/13579689" target="_blank" rel="noopener noreferrer">A4チラシ_03</a>
+      </li>
+      <li>
+        <a href="job.html" target="_blank" rel="noopener noreferrer">A4チラシ_04</a>
+      </li>
+      <li>
+        <a href="https://crowdworks.jp/public/jobs/13581227" target="_blank" rel="noopener noreferrer">A5チラシ</a>
+      </li>
+      <li>
+        <a href="https://crowdworks.jp/public/jobs/13591841" target="_blank" rel="noopener noreferrer">A4パンフレット（三つ折り）</a>
+      </li>
+      <li>
+        <a href="https://www.lancers.jp/work/detail/5629373" target="_blank" rel="noopener noreferrer">ラベル</a>
+      </li>
+      <li>
+        <a href="https://crowdworks.jp/public/jobs/13591723" target="_blank" rel="noopener noreferrer">パッケージ</a>
+      </li>
+      <li>
+        <a href="https://koubodatabase.com/archives/71113" target="_blank" rel="noopener noreferrer">しおり</a>
+      </li>
+    </ul>
+
+  </div>
+</body>
+</html>
